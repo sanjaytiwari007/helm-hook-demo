@@ -1,3 +1,4 @@
+---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -24,3 +25,10 @@ roleRef:
    kind: Role
    name: {{ .Release.Name }}-role
    apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: v1
+data:
+  name: c2FuamF5
+kind: Secret
+metadata:
+  name: {{ .Release.Name }}-secret
