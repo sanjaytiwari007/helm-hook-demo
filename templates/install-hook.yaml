@@ -9,23 +9,29 @@ metadata:
       "helm.sh/hook-weight": "-1"
       "helm.sh/hook-delete-policy": hook-succeeded,hook-failed
 ---
-kind: ClusterRoleBinding
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
 metadata:
-   name: {{ .Release.Name }}-crb-install-hook
-   namespace: {{ .Release.Namespace }}
-   annotations:
-     "helm.sh/hook": post-install,post-upgrade
-     "helm.sh/hook-weight": "0"
-     "helm.sh/hook-delete-policy": hook-succeeded,hook-failed
+  namespace: {{ .Release.Namespace }}
+  name: {{ .Release.Name }}-role-install-hook
+rules:
+- apiGroups: ["*"]
+  resources: ["roles","rolebindings","serviceaccounts"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ .Release.Name }}-rb-install-hook
+  namespace: {{ .Release.Namespace }}
 subjects:
- - kind: ServiceAccount
-   name: {{ .Release.Name }}-sa-install-hook
-   namespace: {{ .Release.Namespace }}
+- kind: ServiceAccount
+  name: {{ .Release.Name }}-sa-install-hook
+  namespace: {{ .Release.Namespace }}
 roleRef:
-   kind: ClusterRole
-   name: cluster-admin
-   apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ .Release.Name }}-role-install-hook
+  apiGroup: rbac.authorization.k8s.io
 ---
 apiVersion: batch/v1
 kind: Job
