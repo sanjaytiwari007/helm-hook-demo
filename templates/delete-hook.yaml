@@ -21,7 +21,7 @@ metadata:
        "helm.sh/hook-delete-policy": hook-succeeded,hook-failed
 rules:
  - apiGroups: [""]
-   resources: ["secret"]
+   resources: ["secrets"]
    verbs: ["get", "list", "watch","delete"]
 ---
 kind: RoleBinding
@@ -65,5 +65,5 @@ spec:
          - "/bin/sh"
          - "-c"
          - |
-             kubectl delete secret {{ .Release.Name }}-secret;
+             kubectl delete secret hookdemo-test-secret;
              sleep 30;
