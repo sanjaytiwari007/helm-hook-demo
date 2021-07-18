@@ -5,15 +5,19 @@ metadata:
   name: {{ .Release.Name }}-sa-install-hook
   namespace: {{ .Release.Namespace }}
   annotations:
-      "helm.sh/hook": post-install,post-upgrade
-      "helm.sh/hook-weight": "-1"
-      "helm.sh/hook-delete-policy": hook-succeeded,hook-failed
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-weight": "5"
+    "helm.sh/hook-delete-policy": hook-succeeded,hook-failed
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
   namespace: {{ .Release.Namespace }}
   name: {{ .Release.Name }}-role-install-hook
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-weight": "5"
+    "helm.sh/hook-delete-policy": hook-succeeded,hook-failed
 rules:
 - apiGroups: ["*"]
   resources: ["roles","rolebindings","serviceaccounts"]
@@ -24,6 +28,10 @@ kind: RoleBinding
 metadata:
   name: {{ .Release.Name }}-rb-install-hook
   namespace: {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-weight": "5"
+    "helm.sh/hook-delete-policy": hook-succeeded,hook-failed
 subjects:
 - kind: ServiceAccount
   name: {{ .Release.Name }}-sa-install-hook
@@ -40,7 +48,7 @@ metadata:
   name: {{ .Release.Name }}-post-install
   annotations:
     "helm.sh/hook": post-install,post-upgrade
-    "helm.sh/hook-weight": "1"
+    "helm.sh/hook-weight": "6"
     "helm.sh/hook-delete-policy": hook-succeeded,hook-failed
 spec:
   template:

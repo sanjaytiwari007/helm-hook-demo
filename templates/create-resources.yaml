@@ -10,8 +10,13 @@ metadata:
    name: {{ .Release.Name }}-role
 rules:
  - apiGroups: [""]
-   resources: ["pods"]
-   verbs: ["get", "list", "watch"]
+   resources: ["secrets"]
+   verbs:
+      - create
+      - update
+      - get
+      - list
+      - delete
 ---
 kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1beta1
@@ -25,3 +30,25 @@ roleRef:
    kind: Role
    name: {{ .Release.Name }}-role
    apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  namespace: {{ .Release.Namespace }}
+  name: {{ .Release.Name }}-create-secret
+spec:
+  template:
+    metadata:
+      name: {{ .Release.Name }}-create-secret
+    spec:
+      restartPolicy: Never
+      serviceAccountName: {{ .Release.Name }}-sa
+      containers:
+      - name: create-secret-job
+        image: "bitnami/kubectl:latest"
+        command:
+         - "/bin/sh"
+         - "-c"
+         - |
+             sleep 10;
+             kubectl create secret generic sanjay-test-secret --from-literal=username=sanjay;
