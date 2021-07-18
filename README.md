@@ -6,8 +6,8 @@
 
 #### _Install helm chart_
   * `helm install --wait --wait-for-jobs hookjob --debug .`
-  * With above command helm will wait for all jobs to be finised before running helm post-intall hoook
-  * Test job by running kubectl command
+  * With above command helm will wait for all the jobs to be finised before running helm post-intall hook
+  * Test the job by running kubectl command
    * `kubectl get jobs`
   * Test the secret created by job which will be deleted by post-delete hook
    * `kubectl get secret`
