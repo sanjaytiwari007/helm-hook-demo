@@ -13,10 +13,10 @@
    * `kubectl get secret`
 
 #### _Delete Helm Chart_
-* Run following command to uninstall helm charts
+* Run following command to uninstall the helm charts
   * `helm uninstall hookjob .`
 * Helm uninstall will trigger delete hook and will delete the secret created by install job.
 * Validate the secreate is gone by running
   * `kubectl get secret`
 
-__NOTE__ : We have sleep in job in order to validate pods log for all the commands in job.
+__NOTE__ : We have sleep in the job in order to validate the pod log for all the commands in job.
